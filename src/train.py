@@ -77,7 +77,13 @@ print(news_df.shape)
 
 print("Cleaning text...")
 
-news_df["text"] = news_df["text"].apply(
+news_df["combined_text"] = (
+    news_df["title"].fillna("")
+    + " "
+    + news_df["text"].fillna("")
+)
+
+news_df["clean_text"] = news_df["combined_text"].apply(
     clean_text
 )
 
@@ -85,7 +91,7 @@ news_df["text"] = news_df["text"].apply(
 # Features and Labels
 # ======================
 
-X = news_df["text"]
+X = news_df["clean_text"]
 
 y = news_df["label"]
 
@@ -157,6 +163,6 @@ evaluate_model(
 print("\nTraining Completed Successfully!")
 
 print("\nSaved Models:")
-print("✓ tfidf.pkl")
-print("✓ logistic_model.pkl")
-print("✓ nb_model.pkl")
+print("- tfidf.pkl")
+print("- logistic_model.pkl")
+print("- nb_model.pkl")

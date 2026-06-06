@@ -1,7 +1,29 @@
 import re
 
 from src.preprocessing.tokenizer import tokenize
-from src.preprocessing.stopwords import STOPWORDS
+
+
+def strip_source_boilerplate(text):
+    """
+    Remove dataset-specific wire-service prefixes before cleaning.
+    """
+
+    if not isinstance(text, str):
+        return ""
+
+    text = re.sub(
+        r"^\s*[A-Z][A-Z\s\.\-]+\(Reuters\)\s*-\s*",
+        "",
+        text
+    )
+
+    text = re.sub(
+        r"^\s*\(Reuters\)\s*-\s*",
+        "",
+        text
+    )
+
+    return text
 
 
 def clean_text(text):
@@ -11,6 +33,8 @@ def clean_text(text):
 
     if not isinstance(text, str):
         return ""
+
+    text = strip_source_boilerplate(text)
 
     # lowercase
     text = text.lower()
@@ -45,13 +69,6 @@ def clean_text(text):
 
     # tokenize
     tokens = tokenize(text)
-
-    # remove stopwords
-    tokens = [
-        token
-        for token in tokens
-        if token not in STOPWORDS
-    ]
 
     cleaned_text = " ".join(tokens)
 

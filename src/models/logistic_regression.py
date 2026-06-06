@@ -7,7 +7,9 @@ from src.utils.config import LR_MODEL_PATH
 def train_lr(X_train, y_train):
 
     model = LogisticRegression(
-        max_iter=1000
+        max_iter=2000,
+        class_weight="balanced",
+        C=2.0
     )
 
     model.fit(

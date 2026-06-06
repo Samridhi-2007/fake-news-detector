@@ -1,6 +1,14 @@
 import streamlit as st
+import importlib
 
-from src.predict import predict_news
+import src.predict as prediction_module
+
+prediction_module = importlib.reload(
+    prediction_module
+)
+
+predict_news = prediction_module.predict_news
+
 st.info(
     "This model predicts based on learned patterns from training data and should not be considered a definitive fact-checking system."
 )
@@ -23,3 +31,14 @@ if st.button("Analyze"):
         st.write(
             f"Confidence: {result['confidence']}%"
         )
+
+        if (
+            "fake_probability" in result
+            and "real_probability" in result
+        ):
+            st.write(
+                f"Fake score: {result['fake_probability']}%"
+            )
+            st.write(
+                f"Real score: {result['real_probability']}%"
+            )
